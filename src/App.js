@@ -5,12 +5,12 @@ function InputComponent(props) {
   return (
     <fieldset>
       <legend>{props.label}</legend>
-      <input type="text" 
-        onChange={ props.onChange }  
+      <input type="text"
+        onChange={props.onChange}
         //eslint-disable-next-line no-unused-expressions
         ref={(elem) => { props.onRef }}
-        />
-      <button onClick={ props.onClick }>Go</button>
+      />
+      <button onClick={props.onClick}>Go</button>
     </fieldset>
   )
 }
@@ -18,59 +18,59 @@ function InputComponent(props) {
 class Game extends React.Component {
   hiddenStyle = {
     display: 'none'
-  }    
+  }
 
   gameContainerStyle = {
-      border: "1px solid black",
-      margin: "30px",
-      padding: "5px",
+    border: "1px solid black",
+    margin: "30px",
+    padding: "5px",
   }
 
   initialState = {
-    guessesLeft: 10 ,
-    randomNumber: getRandomNumber() ,
-    hint:"",
-    gameResult:""
-  }  
-  
+    guessesLeft: 10,
+    randomNumber: getRandomNumber(),
+    hint: "",
+    gameResult: ""
+  }
+
   constructor(props) {
     super(props);
     //set the state by creating a deep copy of the initial state
-    this.state = JSON.parse(JSON.stringify( this.initialState ));
-  }  
+    this.state = JSON.parse(JSON.stringify(this.initialState));
+  }
 
   initGame() {
     this.initialState.randomNumber = getRandomNumber();
-    this.setState( this.initialState );
+    this.setState(this.initialState);
   }
 
   handleOnChange(e) {
     this.lastGuess = parseInt(e.target.value);
-  }    
-  
+  }
+
   handleOnClick() {
-    if (this.lastGuess<0 || this.lastGuess>10) return;
+    if (this.lastGuess < 0 || this.lastGuess > 10) return;
     this.gameLogic();
   }
 
   gameLogic() {
-    let currentState = JSON.parse(JSON.stringify( this.state ))
+    let currentState = JSON.parse(JSON.stringify(this.state))
 
     currentState.guessesLeft--;
 
     //game logic
-    if (this.lastGuess===currentState.randomNumber) {
-      currentState.guessesLeft=0;
+    if (this.lastGuess === currentState.randomNumber) {
+      currentState.guessesLeft = 0;
       currentState.gameResult = "You Won!";
-      currentState.hint="";
+      currentState.hint = "";
       this.props.onGameWon();
-    } else if (currentState.guessesLeft===0) {
+    } else if (currentState.guessesLeft === 0) {
       currentState.gameResult = "Game over.";
-      currentState.hint="";
+      currentState.hint = "";
       this.props.onGameLost()
-    } else if (this.lastGuess<this.state.randomNumber) {
+    } else if (this.lastGuess < this.state.randomNumber) {
       currentState.hint = "Your last guess was " + this.lastGuess + ". Try higher";
-    } else if (this.lastGuess>this.state.randomNumber) {
+    } else if (this.lastGuess > this.state.randomNumber) {
       currentState.hint = "Your last guess was " + this.lastGuess + ". Try lower";
     }
 
@@ -78,79 +78,79 @@ class Game extends React.Component {
       guessesLeft: currentState.guessesLeft,
       gameResult: currentState.gameResult,
       hint: currentState.hint,
-    });      
+    });
   }
 
   render() {
-    
+
     //build ui
-    const gameStatusElement = 
+    const gameStatusElement =
       <div>
         <h3>You have {this.state.guessesLeft} guesses left</h3>
         <div style={this.hiddenStyle}>The random number is {this.state.randomNumber}</div>
       </div>;
-    
-    const hintElement = this.state.hint && 
-          <div><i>{this.state.hint}</i></div>;
-    
-    const inputElement = 
-      <InputComponent 
+
+    const hintElement = this.state.hint &&
+      <div><i>{this.state.hint}</i></div>;
+
+    const inputElement =
+      <InputComponent
         label="Enter your guess:"
-        onChange={ (e) => {this.handleOnChange(e) } } 
-        onClick={ () => { this.handleOnClick() } } />; 
-    
+        onChange={(e) => { this.handleOnChange(e) }}
+        onClick={() => { this.handleOnClick() }} />;
+
     const gameResultElement =
-          <div>
-            <b>{this.state.gameResult}</b> 
-            <button onClick={()=> {this.initGame()} }>Play again</button>
-          </div>; 
-    
+      <div>
+        <b>{this.state.gameResult}</b>
+        <button onClick={() => { this.initGame() }}>Play again</button>
+      </div>;
+
     //render ui
     return (
       <div style={this.gameContainerStyle}>
         {gameStatusElement}
         {hintElement}
-        { this.state.gameResult==="" ? inputElement : gameResultElement }
+        {this.state.gameResult === "" ? inputElement : gameResultElement}
       </div>
     );
   }
 }
 
 class App extends React.Component {
-  constructor(props) { 
+
+  constructor(props) {
     super(props);
-    
     this.state = {
       winCount: 0,
       loseCount: 0
     };
-    
-  }   
+
+  }
 
   onGameLost() {
     this.setState({
-      loseCount: this.state.loseCount +1
+      loseCount: this.state.loseCount + 1
     });
     console.log("lost");
   }
-  
+
   onGameWon() {
     this.setState({
-      winCount: this.state.winCount +1
+      winCount: this.state.winCount + 1
     });
     console.log("won");
   }
-  
+
   render() {
     return (
       <div>
         <div>Wins: {this.state.winCount} Loses: {this.state.loseCount}</div>
-        <Game onGameWon={this.onGameWon.bind(this)} onGameLost={this.onGameLost.bind(this)}  />
-        <Game onGameWon={this.onGameWon.bind(this)} onGameLost={this.onGameLost.bind(this)}  />
-        <Game onGameWon={this.onGameWon.bind(this)} onGameLost={this.onGameLost.bind(this)}  />
-        <Game onGameWon={this.onGameWon.bind(this)} onGameLost={this.onGameLost.bind(this)}  />
-        <Game onGameWon={this.onGameWon.bind(this)} onGameLost={this.onGameLost.bind(this)}  />
-        <Game onGameWon={this.onGameWon.bind(this)} onGameLost={this.onGameLost.bind(this)}  />
+        <Game onGameWon={ ()=> {this.onGameWon()} } onGameLost={ ()=> {this.onGameLost()} } />
+        <Game onGameWon={ ()=> {this.onGameWon()} } onGameLost={ ()=> {this.onGameLost()} } />
+        <Game onGameWon={ ()=> {this.onGameWon()} } onGameLost={ ()=> {this.onGameLost()} } />
+        <Game onGameWon={ ()=> {this.onGameWon()} } onGameLost={ ()=> {this.onGameLost()} } />
+        <Game onGameWon={ ()=> {this.onGameWon()} } onGameLost={ ()=> {this.onGameLost()} } />
+        <Game onGameWon={ ()=> {this.onGameWon()} } onGameLost={ ()=> {this.onGameLost()} } />
       </div>
     );
   }
