@@ -1,1 +1,1 @@
-A simple guess the number game with react
+A simple guess the number game with React
