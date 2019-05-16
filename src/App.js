@@ -38,7 +38,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     //set the state by creating a deep copy of the initial state
-    this.state = JSON.parse(JSON.stringify(this.initialState));
+    this.state = {...this.initialState};
   }
 
   initGame() {
@@ -56,8 +56,8 @@ class Game extends React.Component {
   }
 
   gameLogic() {
-    let currentState = JSON.parse(JSON.stringify(this.state))
 
+    let currentState = {...this.state}
     currentState.guessesLeft--;
 
     //game logic
@@ -71,9 +71,9 @@ class Game extends React.Component {
       currentState.hint = "";
       this.props.onGameLost()
     } else if (this.lastGuess < this.state.randomNumber) {
-      currentState.hint = "Your last guess was " + this.lastGuess + ". Try higher";
+      currentState.hint = `Your last guess was ${this.lastGuess}. Try higher`;
     } else if (this.lastGuess > this.state.randomNumber) {
-      currentState.hint = "Your last guess was " + this.lastGuess + ". Try lower";
+      currentState.hint = `Your last guess was ${this.lastGuess}. Try lower`;
     }
 
     this.setState({
