@@ -15,16 +15,18 @@ function InputComponent(props) {
   )
 }
 
-class Game extends React.Component {
-  hiddenStyle = {
+const styles = {
+  hiddenStyle : {
     display: 'none'
-  }
-
-  gameContainerStyle = {
+  },
+  gameContainerStyle : {
     border: "1px solid black",
     margin: "30px",
     padding: "5px",
   }
+};
+
+class Game extends React.Component {
 
   initialState = {
     guessesLeft: 10,
@@ -87,7 +89,7 @@ class Game extends React.Component {
     const gameStatusElement =
       <div>
         <h3>You have {this.state.guessesLeft} guesses left</h3>
-        <div style={this.hiddenStyle}>The random number is {this.state.randomNumber}</div>
+        <div style={styles.hiddenStyle}>The random number is {this.state.randomNumber}</div>
       </div>;
 
     const hintElement = this.state.hint &&
@@ -107,7 +109,7 @@ class Game extends React.Component {
 
     //render ui
     return (
-      <div style={this.gameContainerStyle}>
+      <div style={styles.gameContainerStyle}>
         {gameStatusElement}
         {hintElement}
         {this.state.gameResult === "" ? inputElement : gameResultElement}
