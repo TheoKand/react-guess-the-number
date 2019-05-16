@@ -9,12 +9,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       winCount: 0,
-      loseCount: 0
-    };
-
-    this.state = {
+      loseCount: 0,
       context: {...defaultContext}
-    }
+    };
 
   }
 
